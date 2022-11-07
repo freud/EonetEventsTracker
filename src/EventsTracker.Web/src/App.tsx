@@ -1,10 +1,11 @@
 import React from 'react';
 import { AppBar, Container, Toolbar, Typography } from "@mui/material";
 import MapIcon from '@mui/icons-material/Map';
+import EventsGrid from "./features/events/EventsGrid";
 
 function App() {
     return (<>
-        <AppBar position="static">
+        <AppBar position="static" sx={{ marginBottom: 3 }}>
             <Container>
                 <Toolbar>
                     <MapIcon sx={{ margin: 1, fontSize: 40 }} />
@@ -14,6 +15,9 @@ function App() {
                 </Toolbar>
             </Container>
         </AppBar>
+        <Container>
+            <EventsGrid />
+        </Container>
     </>);
 }
 

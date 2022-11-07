@@ -4,14 +4,19 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { CssBaseline } from "@mui/material";
 import '@fontsource/roboto/300.css';
+import { QueryClient, QueryClientProvider } from 'react-query'
 
+const queryClient = new QueryClient()
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
+
 root.render(
     <React.StrictMode>
         <CssBaseline />
-        <App />
+        <QueryClientProvider client={queryClient}>
+            <App />
+        </QueryClientProvider>
     </React.StrictMode>
 );
 

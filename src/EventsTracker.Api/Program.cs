@@ -13,6 +13,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(policyBuilder =>
+{
+    policyBuilder.AllowAnyOrigin();
+});
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
