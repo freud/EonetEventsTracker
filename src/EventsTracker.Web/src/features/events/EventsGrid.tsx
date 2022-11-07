@@ -1,17 +1,19 @@
 import * as React from 'react';
 import { useQuery } from 'react-query';
 import {
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Stack, Typography, Chip
+    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Stack, Chip
 } from '@mui/material';
 import EventsGridCell from "./EventsGridCell";
 import EventTypeIcon from "./EventTypeIcon";
 import EventClosedInformation from "./EventClosedInformation";
+import LoadingButton from '@mui/lab/LoadingButton';
 
 interface Event {
     id: string,
     title: string,
     closed: Date | null,
     isClosed: boolean,
+    fetchedAt: Date,
     categories: Category[]
 }
 
@@ -21,7 +23,7 @@ interface Category {
 }
 
 export default function EventsGrid() {
-    const { isLoading, error, data } = useQuery<Event[]>({
+    const { isLoading, isFetching, error, data, refetch } = useQuery<Event[]>({
         queryKey: ['repoData'],
         queryFn: () => fetch('https://localhost:5001/events?limit=200&days=50&type=0')
             .then(res => res.json())
@@ -44,6 +46,9 @@ export default function EventsGrid() {
 
     return (
         <TableContainer component={Paper} sx={{ padding: 1, marginBottom: 3 }}>
+            <Stack>
+                <LoadingButton onClick={() => refetch()} loading={isFetching}>Refresh</LoadingButton>
+            </Stack>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -65,7 +70,8 @@ export default function EventsGrid() {
                             <EventsGridCell disabled={event.isClosed}>{event.id}</EventsGridCell>
                             <EventsGridCell disabled={event.isClosed}>{event.title}</EventsGridCell>
                             <EventsGridCell disabled={event.isClosed}>
-                                {event.categories.map((category) => (<Chip key={category.id} label={category.title} />))}
+                                {event.categories.map((category) => (
+                                    <Chip key={category.id} label={category.title} />))}
                             </EventsGridCell>
                         </TableRow>
                     ))}
