@@ -1,19 +1,27 @@
 import * as React from 'react';
 import { useQuery } from 'react-query';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Stack } from '@mui/material';
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc)
+import {
+    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Stack, Typography
+} from '@mui/material';
+import EventsGridCell from "./EventsGridCell";
+import EventTypeIcon from "./EventTypeIcon";
+import EventClosedInformation from "./EventClosedInformation";
 
 interface Event {
     id: string,
     title: string,
-    closed: Date
+    closed: Date | null,
+    isClosed: boolean
 }
+
 export default function EventsGrid() {
     const { isLoading, error, data } = useQuery<Event[]>({
         queryKey: ['repoData'],
-        queryFn: () => fetch('https://localhost:5001/events?limit=100&days=50&Type=1').then(res => res.json())
+        queryFn: () => fetch('https://localhost:5001/events?limit=200&days=50&type=1')
+            .then(res => res.json())
+            .then(data => data.map((r: Event) => {
+                return { ...r, isClosed: r.closed !== null }
+            }))
     })
 
     if (isLoading) {
@@ -21,12 +29,11 @@ export default function EventsGrid() {
             <Stack alignItems="center" justifyContent="center">
                 <CircularProgress size={70} />
             </Stack>
-        );
+        )
     }
+
     if (error) {
-        return (<>
-            'An error has occurred: ' + error
-        </>)
+        return (<>An error has occurred: {error}</>)
     }
 
     return (
@@ -34,17 +41,22 @@ export default function EventsGrid() {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell width={170}>Closed</TableCell>
+                        <TableCell width={220}>Closed?</TableCell>
                         <TableCell width={110}>ID</TableCell>
                         <TableCell>Title</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data && data.map((row) => (
-                        <TableRow key={row.id}>
-                            <TableCell>{dayjs.utc(row.closed).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
-                            <TableCell>{row.id}</TableCell>
-                            <TableCell>{row.title}</TableCell>
+                    {data && data.map((event) => (
+                        <TableRow key={event.id}>
+                            <EventsGridCell disabled={event.isClosed}>
+                                <Stack direction="row" alignItems="center" gap={1}>
+                                    <EventTypeIcon isClosed={event.isClosed} />
+                                    <EventClosedInformation closedAt={event.closed} />
+                                </Stack>
+                            </EventsGridCell>
+                            <EventsGridCell disabled={event.isClosed}>{event.id}</EventsGridCell>
+                            <EventsGridCell disabled={event.isClosed}>{event.title}</EventsGridCell>
                         </TableRow>
                     ))}
                 </TableBody>
