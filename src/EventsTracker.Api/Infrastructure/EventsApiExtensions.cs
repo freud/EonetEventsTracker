@@ -1,4 +1,6 @@
 ﻿using EventsTracker.Api.Data;
+using Polly;
+using Polly.Extensions.Http;
 
 namespace EventsTracker.Api.Infrastructure;
 
@@ -10,7 +12,16 @@ public static class EventsApiExtensions
     {
         serviceCollection.AddTransient<IEventsEndpoint, EventsEndpointBuilder>();
         serviceCollection.Configure<NasaEonetApiOptions>(configuration.GetSection(NasaEonetApiOptions.Section));
-        serviceCollection.AddHttpClient<IEventsRepository, EventsRepository>();
+        serviceCollection
+            .AddHttpClient<IEventsRepository, EventsRepository>()
+            .AddPolicyHandler(GetRetryPolicy());
         return serviceCollection;
+    }
+
+    private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+    {
+        return HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(100));
     }
 }
