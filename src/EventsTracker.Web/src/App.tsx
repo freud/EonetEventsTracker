@@ -1,26 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { AppBar, Container, Toolbar, Typography } from "@mui/material";
+import MapIcon from '@mui/icons-material/Map';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (<>
+        <AppBar position="static">
+            <Container>
+                <Toolbar>
+                    <MapIcon sx={{ margin: 1, fontSize: 40 }} />
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        NASA Earth Observatory Natural Events Tracker
+                    </Typography>
+                </Toolbar>
+            </Container>
+        </AppBar>
+    </>);
 }
 
 export default App;
