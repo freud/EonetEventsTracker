@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventsTracker.Api", "src\Ev
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "EventsTracker.Web", "src\EventsTracker.Web\EventsTracker.Web.esproj", "{EB8A3EF5-DD79-441C-A085-DFDFD3D06294}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsTracker.Api.Tests", "src\EventsTracker.Api.Tests\EventsTracker.Api.Tests.csproj", "{AAD69110-EE85-423F-8A9B-FA6C6BA4DB2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{EB8A3EF5-DD79-441C-A085-DFDFD3D06294}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB8A3EF5-DD79-441C-A085-DFDFD3D06294}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB8A3EF5-DD79-441C-A085-DFDFD3D06294}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{AAD69110-EE85-423F-8A9B-FA6C6BA4DB2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAD69110-EE85-423F-8A9B-FA6C6BA4DB2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAD69110-EE85-423F-8A9B-FA6C6BA4DB2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAD69110-EE85-423F-8A9B-FA6C6BA4DB2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
