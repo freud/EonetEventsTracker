@@ -14,7 +14,7 @@ public class EventsController : ControllerBase
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
+    [HttpGet]
     public async Task<IEnumerable<Event>> Get([FromQuery]EventsFilter filter, CancellationToken token)
     {
         return await _repository.GetEvents(filter, token);
