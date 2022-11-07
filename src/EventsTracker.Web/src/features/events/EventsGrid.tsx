@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { useQuery } from 'react-query';
-import {
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, CircularProgress, Stack
-} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Stack } from '@mui/material';
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc)
 
 interface Event {
     id: string,
@@ -33,7 +34,7 @@ export default function EventsGrid() {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell width={110}>Closed</TableCell>
+                        <TableCell width={170}>Closed</TableCell>
                         <TableCell width={110}>ID</TableCell>
                         <TableCell>Title</TableCell>
                     </TableRow>
@@ -41,7 +42,7 @@ export default function EventsGrid() {
                 <TableBody>
                     {data && data.map((row) => (
                         <TableRow key={row.id}>
-                            <TableCell>{row.closed.toLocaleString('pl-PL', {hour12: false})}</TableCell>
+                            <TableCell>{dayjs.utc(row.closed).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
                             <TableCell>{row.id}</TableCell>
                             <TableCell>{row.title}</TableCell>
                         </TableRow>
