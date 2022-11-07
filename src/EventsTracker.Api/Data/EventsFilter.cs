@@ -7,15 +7,15 @@ public class EventsFilter
     /// of that date will allow you to filter for only-open or only-closed events.
     /// Omitting the status parameter will return only the currently open events.
     /// </summary>
-    public EventStatus Type { get; set; }
-    
+    public EventStatus Type { get; set; } = EventStatus.Open;
+
     /// <summary>
     /// Limits the number of events returned.
     /// </summary>
-    public int Limit { get; set; }
-    
+    public int Limit { get; set; } = 10;
+
     /// <summary>
     /// Limit the number of prior days (including today) from which events will be returned.
     /// </summary>
-    public int Days { get; set; }
+    public int Days { get; set; } = 1;
 }

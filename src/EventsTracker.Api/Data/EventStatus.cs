@@ -2,6 +2,6 @@
 
 public enum EventStatus
 {
-    Open,
-    Closed
+    Open = 0,
+    Closed = 1
 }
