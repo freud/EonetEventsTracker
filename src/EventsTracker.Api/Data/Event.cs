@@ -12,4 +12,6 @@ public class Event
     
     [JsonPropertyName("closed")]
     public DateTime? ClosedAt { get; set; }
+
+    public Category[] Categories { get; set; }
 }
