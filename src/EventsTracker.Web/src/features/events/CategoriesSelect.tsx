@@ -6,10 +6,11 @@ import { useState } from "react";
 
 interface CategoriesSelectProps {
     onCategoryChanged: (category: Category) => void
+    category: Category | undefined
 }
 
 export default function CategoriesSelect(props: CategoriesSelectProps) {
-    const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
+    const [categoryId, setCategoryId] = useState<string | undefined>(props.category ? props.category.id : undefined);
     const { isLoading, isFetching, data } = useQuery(
         {
             refetchInterval: false,

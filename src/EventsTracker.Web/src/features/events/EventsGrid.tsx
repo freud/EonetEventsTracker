@@ -83,11 +83,14 @@ export default function EventsGrid() {
     }
 
     return (<>
-        <EventsFilter onFilterApply={async (type, category) => {
-            await setEventType(type)
-            await setFilterCategory(category)
-            refetch()
-        }} />
+        <EventsFilter
+            type={eventType}
+            category={filterCategory}
+            onFilterApply={async (type, category) => {
+                await setEventType(type)
+                await setFilterCategory(category)
+                refetch()
+            }} />
         <TableContainer component={Paper} sx={{ padding: 1, marginBottom: 3, marginTop: 1 }}>
             <Table>
                 <TableHead>

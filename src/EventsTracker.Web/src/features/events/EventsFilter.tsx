@@ -11,14 +11,16 @@ export enum EventType {
     Closed = 1
 }
 
-interface FilterCallbacks {
+interface EventsFilter {
     onFilterApply: (type: EventType, category: Category | undefined) => void
-    isLoading?: boolean
+    isLoading?: boolean,
+    type: EventType,
+    category: Category | undefined;
 }
 
-export default function EventsFilter(props: FilterCallbacks) {
-    const [type, setType] = useState(EventType.Open);
-    const [category, setCategory] = useState<Category | undefined>(undefined);
+export default function EventsFilter(props: EventsFilter) {
+    const [type, setType] = useState(props.type);
+    const [category, setCategory] = useState<Category | undefined>(props.category);
     const applyFilter = () =>{
         props.onFilterApply(type, category);
     }
@@ -31,7 +33,7 @@ export default function EventsFilter(props: FilterCallbacks) {
                 <MenuItem value={EventType.Closed}>Closed</MenuItem>
             </Select>
         </FormControl>
-        <CategoriesSelect onCategoryChanged={category => setCategory(category)} />
+        <CategoriesSelect category={category} onCategoryChanged={category => setCategory(category)} />
         <LoadingButton variant="outlined" onClick={() => applyFilter()} loading={props.isLoading}><RestartAltIcon /></LoadingButton>
     </Stack>);
 }
