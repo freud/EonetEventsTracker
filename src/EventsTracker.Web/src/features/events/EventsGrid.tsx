@@ -6,7 +6,7 @@ import {
 import LoadingButton from '@mui/lab/LoadingButton';
 import EventGridRow from "./EventGridRow";
 
-export interface Event {
+export interface EventData {
     id: string,
     title: string,
     closed: Date | null,
@@ -20,6 +20,18 @@ interface Category {
     title: string
 }
 
+export class Event {
+    public id: string = "";
+    public title: string = "";
+    public closed: Date | null = null;
+    public categories: Category[] = [];
+    public isClosed: boolean;
+    constructor(data: EventData) {
+        Object.assign(this, data);
+        this.isClosed = this.closed !== null;
+    }
+}
+
 export default function EventsGrid() {
     const { isLoading, isFetching, error, data, refetch } = useQuery<Event[]>({
         refetchInterval: false,
@@ -28,9 +40,7 @@ export default function EventsGrid() {
         queryFn: () => fetch('https://localhost:5001/events?limit=200&days=50&type=0')
             .then(res => res.json())
             .then(events => {
-                return events.map((event: any) => {
-                    return { ...event, isClosed: event.closed !== null }
-                })
+                return events.map((event: any) => new Event(event))
             })
     })
 
