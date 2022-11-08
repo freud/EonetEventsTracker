@@ -19,4 +19,12 @@ public class EventsRepository : IEventsRepository
         var body = await response.Content.ReadFromJsonAsync<EventsResponse>(cancellationToken: token);
         return body.Events;
     }
+
+    public async Task<EventDetails> GetDetails(string eventId, CancellationToken token)
+    {
+        var uri = await _endpoint.GetDetails(eventId);
+        var response = await _client.GetAsync(uri, token);
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadFromJsonAsync<EventDetails>(cancellationToken: token);
+    }
 }

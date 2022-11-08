@@ -1,33 +1,17 @@
-import { TableCell, TableRow, Stack, Chip, Button } from "@mui/material";
+import { TableCell, TableRow, Stack, Chip, ToggleButton } from "@mui/material";
 import EventTypeIcon from "./EventTypeIcon";
 import EventClosedInformation from "./EventClosedInformation";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import * as React from "react";
 import EventsGridCell from "./EventsGridCell";
 import { Event } from './EventsGrid'
-import { useQuery } from "react-query";
 import EventDetailsGridRow from "./EventDetailsGridRow";
-
-export interface EventDetails {
-    id: string,
-    title: string,
-    description: string
-}
-
-export type EventQueryKey = ['event', { id: string }];
-
-export type FetchEvent = {
-    queryKey: EventQueryKey;
-};
+import { useState } from "react";
 
 export default function EventGridRow(props: { event: Event }) {
-    const queryKey: EventQueryKey = ['event', { id: props.event.id }];
-    const { isLoading, isFetching, error, data, refetch } = useQuery(
-        queryKey,
-        ({ queryKey: [, param] }: FetchEvent): EventDetails => {
-            return { id: param.id, title: "title", description: "TEST" }
-        }
-    )
+
+    const [isDetailsExpanded, setIsDetailsExpanded] = useState(false);
 
     return (<>
         <TableRow key={props.event.id}>
@@ -44,10 +28,13 @@ export default function EventGridRow(props: { event: Event }) {
                     <Chip key={category.id} label={category.title} />))}
             </EventsGridCell>
             <TableCell>
-                <Button variant="text" startIcon={<ExpandMoreIcon />} onClick={() => refetch()}>Details</Button>
+                <ToggleButton value="check" selected={isDetailsExpanded} 
+                    onChange={() => setIsDetailsExpanded(!isDetailsExpanded)}>
+                    {isDetailsExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    Details                    
+                </ToggleButton>
             </TableCell>
         </TableRow>
-        {data && <EventDetailsGridRow eventDetails={data} />}
-        {/*<EventDetailsGridRow eventDetails={tableRow as EventDetails} />*/}
+        {isDetailsExpanded && <EventDetailsGridRow eventId={props.event.id} />}
     </>);
 }

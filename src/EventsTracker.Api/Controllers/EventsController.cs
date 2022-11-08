@@ -19,4 +19,11 @@ public class EventsController : ControllerBase
     {
         return await _repository.GetEvents(filter, token);
     }
+
+    [HttpGet]
+    [Route("{eventId}/details")]
+    public async Task<EventDetails> GetDetails(string eventId, CancellationToken token)
+    {
+        return await _repository.GetDetails(eventId, token);
+    }
 }

@@ -33,4 +33,10 @@ public class EventsEndpointBuilder : IEventsEndpoint
         var queryString = string.Join("&", queryParameters);
         return new Uri($"{_options.BaseUrl}{endpoint}?{queryString}", UriKind.Absolute);
     }
+
+    public async Task<Uri> GetDetails(string eventId)
+    {
+        var endpoint = "api/v2.1/events";
+        return new Uri($"{_options.BaseUrl}{endpoint}/{eventId}", UriKind.Absolute);
+    }
 }
