@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { useQuery } from 'react-query';
 import {
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Stack, Chip
+    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Stack
 } from '@mui/material';
-import EventsGridCell from "./EventsGridCell";
-import EventTypeIcon from "./EventTypeIcon";
-import EventClosedInformation from "./EventClosedInformation";
 import LoadingButton from '@mui/lab/LoadingButton';
+import EventGridRow from "./EventGridRow";
 
-interface Event {
+export interface Event {
     id: string,
     title: string,
     closed: Date | null,
@@ -27,9 +25,11 @@ export default function EventsGrid() {
         queryKey: ['repoData'],
         queryFn: () => fetch('https://localhost:5001/events?limit=200&days=50&type=0')
             .then(res => res.json())
-            .then(data => data.map((r: Event) => {
-                return { ...r, isClosed: r.closed !== null }
-            }))
+            .then(events => {
+                return events.map((event: any) => {
+                    return { ...event, isClosed: event.closed !== null }
+                })
+            })
     })
 
     if (isLoading) {
@@ -56,24 +56,12 @@ export default function EventsGrid() {
                         <TableCell width={110}>ID</TableCell>
                         <TableCell>Title</TableCell>
                         <TableCell>Categories</TableCell>
+                        <TableCell></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {data && data.map((event) => (
-                        <TableRow key={event.id}>
-                            <EventsGridCell disabled={event.isClosed}>
-                                <Stack direction="row" alignItems="center" gap={1}>
-                                    <EventTypeIcon isClosed={event.isClosed} />
-                                    <EventClosedInformation closedAt={event.closed} />
-                                </Stack>
-                            </EventsGridCell>
-                            <EventsGridCell disabled={event.isClosed}>{event.id}</EventsGridCell>
-                            <EventsGridCell disabled={event.isClosed}>{event.title}</EventsGridCell>
-                            <EventsGridCell disabled={event.isClosed}>
-                                {event.categories.map((category) => (
-                                    <Chip key={category.id} label={category.title} />))}
-                            </EventsGridCell>
-                        </TableRow>
+                        <EventGridRow event={event} key={event.id} />
                     ))}
                 </TableBody>
             </Table>
