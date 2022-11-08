@@ -48,13 +48,22 @@ export default function EventDetailsGridRow(props: { eventId: string }) {
             enabled: true
         }
     )
-    if (isLoading || isFetching || data == null) {
+    if (isLoading || isFetching) {
         return (
             <TableRow>
-                <TableCell colSpan={5}><CircularProgress size={30} /></TableCell>
+                <TableCell colSpan={5}><CircularProgress size={30} /> Loading...</TableCell>
             </TableRow>
         );
     }
+
+    if (data == null) {
+        return (
+            <TableRow>
+                <TableCell colSpan={5}>No data found</TableCell>
+            </TableRow>
+        );
+    }
+
     return (<>
         <TableRow id={`details-${data.id}`}>
             <TableCell colSpan={5}>
