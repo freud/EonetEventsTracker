@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useQuery } from 'react-query';
 import {
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Stack
+    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Stack, Alert, AlertTitle,
+    Button
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import EventGridRow from "./EventGridRow";
@@ -33,12 +34,18 @@ export class Event {
 }
 
 export default function EventsGrid() {
-    const { isLoading, isFetching, error, data, refetch } = useQuery<Event[]>({
+    const { isLoading, isFetching, error, isError, data, refetch } = useQuery({
         refetchInterval: false,
         refetchOnWindowFocus: false,
         queryKey: ['repoData'],
-        queryFn: () => fetch('https://localhost:5001/events?limit=200&days=50&type=0')
-            .then(res => res.json())
+        useErrorBoundary: (error) => false,
+        queryFn: (): Promise<Event[]> => fetch('https://localhost:5001/events?limit=200&days=50&type=0')
+            .then(async res => {
+                if (!res.ok) {
+                    return Promise.reject(await res.text());
+                }
+                return res.json();
+            })
             .then(events => {
                 return events.map((event: any) => new Event(event))
             })
@@ -52,8 +59,14 @@ export default function EventsGrid() {
         )
     }
 
-    if (error) {
-        return (<>An error has occurred: {error}</>)
+    if (isError) {
+        return (<>
+            <Alert variant="filled" severity="error">
+                <AlertTitle>Error</AlertTitle>
+                Unable to load events!<br />
+            </Alert>
+            <Button onClick={() => refetch()} color="error" variant="outlined" sx={{ marginTop: 3 }}>Retry...</Button>
+        </>)
     }
 
     return (
