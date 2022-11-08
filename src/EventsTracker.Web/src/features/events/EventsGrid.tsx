@@ -4,8 +4,10 @@ import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Stack, Alert, AlertTitle,
     Button
 } from '@mui/material';
-import LoadingButton from '@mui/lab/LoadingButton';
 import EventGridRow from "./EventGridRow";
+import EventsFilter, { EventType } from "./EventsFilter";
+import { useState } from "react";
+import { EventQueryKey, FetchEvent } from "./EventDetailsGridRow";
 
 export interface EventData {
     id: string,
@@ -33,23 +35,30 @@ export class Event {
     }
 }
 
+export type EventsQueryKey = ["events", { type: EventType }];
+export type FetchEvents = { queryKey: EventsQueryKey };
+
 export default function EventsGrid() {
-    const { isLoading, isFetching, error, isError, data, refetch } = useQuery({
-        refetchInterval: false,
-        refetchOnWindowFocus: false,
-        queryKey: ['repoData'],
-        useErrorBoundary: (error) => false,
-        queryFn: (): Promise<Event[]> => fetch('https://localhost:5001/events?limit=200&days=50&type=0')
-            .then(async res => {
-                if (!res.ok) {
-                    return Promise.reject(await res.text());
-                }
-                return res.json();
-            })
-            .then(events => {
-                return events.map((event: any) => new Event(event))
-            })
-    })
+    const [eventType, setEventType] = useState(EventType.Open)
+    const queryKey: EventsQueryKey = ["events", { type: eventType }];
+    const { isLoading, isFetching, error, isError, data, refetch } = useQuery(
+        queryKey,
+        ({ queryKey: [, param] }: FetchEvents): Promise<Event[]> => fetch(`https://localhost:5001/events?limit=200&days=50&type=${param.type}`)
+        .then(async res => {
+            if (!res.ok) {
+                return Promise.reject(await res.text());
+            }
+            return res.json();
+        })
+        .then(events => {
+            return events.map((event: any) => new Event(event))
+        }),
+        {
+            refetchInterval: false,
+            refetchOnWindowFocus: false,
+            useErrorBoundary: (error) => false,
+            
+        })
 
     if (isLoading) {
         return (
@@ -69,11 +78,9 @@ export default function EventsGrid() {
         </>)
     }
 
-    return (
-        <TableContainer component={Paper} sx={{ padding: 1, marginBottom: 3 }}>
-            <Stack>
-                <LoadingButton onClick={() => refetch()} loading={isFetching}>Refresh</LoadingButton>
-            </Stack>
+    return (<>
+        <EventsFilter onFilterApply={(type) => setEventType(type)} />
+        <TableContainer component={Paper} sx={{ padding: 1, marginBottom: 3, marginTop: 1 }}>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -91,5 +98,5 @@ export default function EventsGrid() {
                 </TableBody>
             </Table>
         </TableContainer>
-    );
+    </>);
 }
