@@ -7,7 +7,6 @@ import {
 import EventGridRow from "./EventGridRow";
 import EventsFilter, { EventType } from "./EventsFilter";
 import { useState } from "react";
-import { EventQueryKey, FetchEvent } from "./EventDetailsGridRow";
 
 export interface EventData {
     id: string,
@@ -42,7 +41,7 @@ export default function EventsGrid() {
     const [eventType, setEventType] = useState(EventType.Open)
     const [filterCategory, setFilterCategory] = useState<Category | undefined>(undefined)
     const queryKey: EventsQueryKey = ["events", { type: eventType, category: filterCategory }];
-    const { isLoading, isFetching, error, isError, data, refetch } = useQuery(
+    const { isLoading, isError, data, refetch } = useQuery(
         queryKey,
         ({ queryKey: [, param] }: FetchEvents): Promise<Event[]> => {
             const categoryQueryParameter = filterCategory ? `&categoryId=${filterCategory.id}` : "";
