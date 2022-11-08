@@ -18,4 +18,9 @@ public class EventsFilter
     /// Limit the number of prior days (including today) from which events will be returned.
     /// </summary>
     public int Days { get; set; } = 1;
+
+    /// <summary>
+    /// Filter the returned events by the category. Multiple sources can be included in the parameter: comma separated, operates as a boolean OR.
+    /// </summary>
+    public string? CategoryId { get; set; }
 }

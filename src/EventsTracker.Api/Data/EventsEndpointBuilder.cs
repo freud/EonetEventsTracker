@@ -14,12 +14,16 @@ public class EventsEndpointBuilder : IEventsEndpoint
 
     public async Task<Uri> Get(EventsFilter filter)
     {
-        var endpoint = "api/v2.1/events";
+        var endpoint = "api/v3/events";
         var queryParameters = new List<string>
         {
             $"limit={filter.Limit}",
             $"days={filter.Days}"
         };
+        if (filter.CategoryId != null)
+        {
+            queryParameters.Add($"category={filter.CategoryId}");
+        }
         switch (filter.Type)
         {
             case EventStatus.Open:

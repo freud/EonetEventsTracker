@@ -18,8 +18,8 @@ export interface EventData {
     categories: Category[]
 }
 
-interface Category {
-    id: number,
+export interface Category {
+    id: string,
     title: string
 }
 
@@ -35,24 +35,28 @@ export class Event {
     }
 }
 
-export type EventsQueryKey = ["events", { type: EventType }];
+export type EventsQueryKey = ["events", { type: EventType, category: Category | undefined }];
 export type FetchEvents = { queryKey: EventsQueryKey };
 
 export default function EventsGrid() {
     const [eventType, setEventType] = useState(EventType.Open)
-    const queryKey: EventsQueryKey = ["events", { type: eventType }];
+    const [filterCategory, setFilterCategory] = useState<Category | undefined>(undefined)
+    const queryKey: EventsQueryKey = ["events", { type: eventType, category: filterCategory }];
     const { isLoading, isFetching, error, isError, data, refetch } = useQuery(
         queryKey,
-        ({ queryKey: [, param] }: FetchEvents): Promise<Event[]> => fetch(`https://localhost:5001/events?limit=200&days=50&type=${param.type}`)
-        .then(async res => {
-            if (!res.ok) {
-                return Promise.reject(await res.text());
-            }
-            return res.json();
-        })
-        .then(events => {
-            return events.map((event: any) => new Event(event))
-        }),
+        ({ queryKey: [, param] }: FetchEvents): Promise<Event[]> => {
+            const categoryQueryParameter = filterCategory ? `&categoryId=${filterCategory.id}` : "";
+            return fetch(`https://localhost:5001/events?limit=200&days=50&type=${param.type}${categoryQueryParameter}`)
+                .then(async res => {
+                    if (!res.ok) {
+                        return Promise.reject(await res.text());
+                    }
+                    return res.json();
+                })
+                .then(events => {
+                    return events.map((event: any) => new Event(event))
+                })
+        },
         {
             refetchInterval: false,
             refetchOnWindowFocus: false,
@@ -79,7 +83,11 @@ export default function EventsGrid() {
     }
 
     return (<>
-        <EventsFilter onFilterApply={(type) => setEventType(type)} />
+        <EventsFilter onFilterApply={async (type, category) => {
+            await setEventType(type)
+            await setFilterCategory(category)
+            refetch()
+        }} />
         <TableContainer component={Paper} sx={{ padding: 1, marginBottom: 3, marginTop: 1 }}>
             <Table>
                 <TableHead>

@@ -3,6 +3,8 @@ import { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import * as React from "react";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import CategoriesSelect from "./CategoriesSelect";
+import { Category } from "./EventsGrid";
 
 export enum EventType {
     Open = 0,
@@ -10,14 +12,15 @@ export enum EventType {
 }
 
 interface FilterCallbacks {
-    onFilterApply: (type: EventType) => void
+    onFilterApply: (type: EventType, category: Category | undefined) => void
     isLoading?: boolean
 }
 
 export default function EventsFilter(props: FilterCallbacks) {
     const [type, setType] = useState(EventType.Open);
+    const [category, setCategory] = useState<Category | undefined>(undefined);
     const applyFilter = () =>{
-        props.onFilterApply(type);
+        props.onFilterApply(type, category);
     }
 
     return (<Stack direction='row' justifyContent="end">
@@ -28,6 +31,7 @@ export default function EventsFilter(props: FilterCallbacks) {
                 <MenuItem value={EventType.Closed}>Closed</MenuItem>
             </Select>
         </FormControl>
+        <CategoriesSelect onCategoryChanged={category => setCategory(category)} />
         <LoadingButton variant="outlined" onClick={() => applyFilter()} loading={props.isLoading}><RestartAltIcon /></LoadingButton>
     </Stack>);
 }

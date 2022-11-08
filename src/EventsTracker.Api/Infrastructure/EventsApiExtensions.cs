@@ -11,9 +11,13 @@ public static class EventsApiExtensions
         ConfigurationManager configuration)
     {
         serviceCollection.AddTransient<IEventsEndpoint, EventsEndpointBuilder>();
+        serviceCollection.AddTransient<ICategoriesEndpoint, CategoriesEndpointBuilder>();
         serviceCollection.Configure<NasaEonetApiOptions>(configuration.GetSection(NasaEonetApiOptions.Section));
         serviceCollection
             .AddHttpClient<IEventsRepository, EventsRepository>()
+            .AddPolicyHandler(GetRetryPolicy());
+        serviceCollection
+            .AddHttpClient<ICategoriesRepository, CategoriesRepository>()
             .AddPolicyHandler(GetRetryPolicy());
         return serviceCollection;
     }
