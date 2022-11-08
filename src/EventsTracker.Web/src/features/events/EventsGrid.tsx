@@ -22,6 +22,8 @@ interface Category {
 
 export default function EventsGrid() {
     const { isLoading, isFetching, error, data, refetch } = useQuery<Event[]>({
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
         queryKey: ['repoData'],
         queryFn: () => fetch('https://localhost:5001/events?limit=200&days=50&type=0')
             .then(res => res.json())
