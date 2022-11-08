@@ -15,4 +15,7 @@ public class EventDetails
 
     [JsonPropertyName("categories")]
     public Category[] Categories { get; set; }
+
+    [JsonPropertyName("sources")]
+    public Source[] Sources { get; set; }
 }
