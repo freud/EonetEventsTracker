@@ -5,6 +5,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import * as React from "react";
 import EventsGridCell from "./EventsGridCell";
 import { Event } from './EventsGrid'
+import { useQuery } from "react-query";
+import EventDetailsGridRow from "./EventDetailsGridRow";
 
 export interface EventDetails {
     id: string,
@@ -12,7 +14,21 @@ export interface EventDetails {
     description: string
 }
 
+export type EventQueryKey = ['event', { id: string }];
+
+export type FetchEvent = {
+    queryKey: EventQueryKey;
+};
+
 export default function EventGridRow(props: { event: Event }) {
+    const queryKey: EventQueryKey = ['event', { id: props.event.id }];
+    const { isLoading, isFetching, error, data, refetch } = useQuery(
+        queryKey,
+        ({ queryKey: [, param] }: FetchEvent): EventDetails => {
+            return { id: param.id, title: "title", description: "TEST" }
+        }
+    )
+
     return (<>
         <TableRow key={props.event.id}>
             <EventsGridCell disabled={props.event.isClosed}>
@@ -28,9 +44,10 @@ export default function EventGridRow(props: { event: Event }) {
                     <Chip key={category.id} label={category.title} />))}
             </EventsGridCell>
             <TableCell>
-                <Button variant="text" startIcon={<ExpandMoreIcon />}>Details</Button>
+                <Button variant="text" startIcon={<ExpandMoreIcon />} onClick={() => refetch()}>Details</Button>
             </TableCell>
         </TableRow>
+        {data && <EventDetailsGridRow eventDetails={data} />}
         {/*<EventDetailsGridRow eventDetails={tableRow as EventDetails} />*/}
     </>);
 }
