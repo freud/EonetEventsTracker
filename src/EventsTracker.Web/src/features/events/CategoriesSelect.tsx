@@ -20,7 +20,7 @@ export default function CategoriesSelect(props: CategoriesSelectProps) {
             refetchOnWindowFocus: false,
             enabled: true,
             queryFn: (): Promise<Category[]> =>
-                fetch('https://localhost:5001/categories')
+                fetch(`${process.env.REACT_APP_API_BASE_URL}/categories`)
                     .then(async res => {
                         if (!res.ok) {
                             return Promise.reject(await res.text());

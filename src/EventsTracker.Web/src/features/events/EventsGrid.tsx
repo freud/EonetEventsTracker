@@ -53,7 +53,7 @@ export default function EventsGrid(props: { type: EventType, category: Category 
         queryKey,
         ({ queryKey: [, param] }: FetchEvents): Promise<Event[]> => {
             const categoryQueryParameter = param.category?.id ? `&categoryId=${param.category?.id}` : "";
-            return fetch(`https://localhost:5001/events?limit=200&days=${param.days}&type=${param.type}${categoryQueryParameter}`)
+            return fetch(`${process.env.REACT_APP_API_BASE_URL}/events?limit=200&days=${param.days}&type=${param.type}${categoryQueryParameter}`)
                 .then(async res => {
                     if (!res.ok) {
                         return Promise.reject(await res.text());

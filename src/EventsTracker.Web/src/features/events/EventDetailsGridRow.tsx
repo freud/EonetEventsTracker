@@ -30,7 +30,7 @@ export default function EventDetailsGridRow(props: { eventId: string }) {
     const { isLoading, isFetching, data } = useQuery(
         queryKey,
         ({ queryKey: [, param] }: FetchEvent): Promise<EventDetails> =>
-            fetch(`https://localhost:5001/events/${param.id}/details`)
+            fetch(`${process.env.REACT_APP_API_BASE_URL}/events/${param.id}/details`)
                 .then(async res => {
                     if (!res.ok) {
                         return Promise.reject(await res.text());
