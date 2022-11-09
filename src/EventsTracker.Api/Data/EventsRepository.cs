@@ -17,6 +17,10 @@ public class EventsRepository : IEventsRepository
         var response = await _client.GetAsync(uri, token);
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<EventsResponse>(cancellationToken: token);
+        if (body == null)
+        {
+            throw new InvalidOperationException("Events response is expected to be not empty");
+        }
         return body.Events;
     }
 
@@ -25,6 +29,11 @@ public class EventsRepository : IEventsRepository
         var uri = await _endpoint.GetDetails(eventId);
         var response = await _client.GetAsync(uri, token);
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<EventDetails>(cancellationToken: token);
+        var body = await response.Content.ReadFromJsonAsync<EventDetails>(cancellationToken: token);
+        if (body == null)
+        {
+            throw new InvalidOperationException("Event details response is expected to be not empty");
+        }
+        return body;
     }
 }
