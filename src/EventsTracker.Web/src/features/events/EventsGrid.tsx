@@ -5,8 +5,8 @@ import {
     Button
 } from '@mui/material';
 import EventGridRow from "./EventGridRow";
-import EventsFilter, { EventType } from "./EventsFilter";
 import { useState } from "react";
+import { EventType, Filter } from "../../App";
 
 export interface EventData {
     id: string,
@@ -37,14 +37,12 @@ export class Event {
 export type EventsQueryKey = ["events", { type: EventType, category: Category | undefined }];
 export type FetchEvents = { queryKey: EventsQueryKey };
 
-export default function EventsGrid() {
-    const [eventType, setEventType] = useState(EventType.Open)
-    const [filterCategory, setFilterCategory] = useState<Category | undefined>(undefined)
-    const queryKey: EventsQueryKey = ["events", { type: eventType, category: filterCategory }];
+export default function EventsGrid(props: { filter: Filter }) {
+    const queryKey: EventsQueryKey = ["events", { type: props.filter.type, category: props.filter.category }];
     const { isLoading, isError, data, refetch } = useQuery(
         queryKey,
         ({ queryKey: [, param] }: FetchEvents): Promise<Event[]> => {
-            const categoryQueryParameter = filterCategory ? `&categoryId=${filterCategory.id}` : "";
+            const categoryQueryParameter = param.category?.id ? `&categoryId=${param.category?.id}` : "";
             return fetch(`https://localhost:5001/events?limit=200&days=50&type=${param.type}${categoryQueryParameter}`)
                 .then(async res => {
                     if (!res.ok) {
@@ -82,14 +80,6 @@ export default function EventsGrid() {
     }
 
     return (<>
-        <EventsFilter
-            type={eventType}
-            category={filterCategory}
-            onFilterApply={async (type, category) => {
-                await setEventType(type)
-                await setFilterCategory(category)
-                refetch()
-            }} />
         <TableContainer component={Paper} sx={{ padding: 1, marginBottom: 3, marginTop: 1 }}>
             <Table>
                 <TableHead>

@@ -5,20 +5,9 @@ import * as React from "react";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CategoriesSelect from "./CategoriesSelect";
 import { Category } from "./EventsGrid";
+import { Filter, EventType } from "../../App";
 
-export enum EventType {
-    Open = 0,
-    Closed = 1
-}
-
-interface EventsFilter {
-    onFilterApply: (type: EventType, category: Category | undefined) => void
-    isLoading?: boolean,
-    type: EventType,
-    category: Category | undefined;
-}
-
-export default function EventsFilter(props: EventsFilter) {
+export default function EventsFilter(props: Filter) {
     const [type, setType] = useState(props.type);
     const [category, setCategory] = useState<Category | undefined>(props.category);
     const applyFilter = () =>{
