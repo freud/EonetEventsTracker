@@ -5,18 +5,22 @@ import * as React from "react";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CategoriesSelect from "./CategoriesSelect";
 import { Category, EventType } from "./EventsGrid";
+import DaysSelect from "./DaysSelect";
 
 interface FilterProps {
-    onFilterApply: (type: EventType, category: Category | undefined) => void
+    onFilterApply: (type: EventType, category: Category | undefined, numberOfDaysBack: number) => void
     type: EventType,
-    category: Category | undefined;
+    category: Category | undefined,
+    days: number
 }
 
 export default function EventsFilter(props: FilterProps) {
     const [type, setType] = useState(props.type);
     const [category, setCategory] = useState<Category | undefined>(props.category);
+    const [days, setDays] = useState<number>(10);
     const applyFilter = () =>{
-        props.onFilterApply(type, category);
+        console.log({type, category, days})
+        props.onFilterApply(type, category, days);
     }
 
     return (<Stack direction='row' justifyContent="end">
@@ -28,6 +32,7 @@ export default function EventsFilter(props: FilterProps) {
             </Select>
         </FormControl>
         <CategoriesSelect category={category} onCategoryChanged={category => setCategory(category)} />
+        <DaysSelect days={days} onChanged={(days) => setDays(days)} />
         <LoadingButton variant="outlined" onClick={() => applyFilter()}><RestartAltIcon /></LoadingButton>
     </Stack>);
 }

@@ -23,16 +23,16 @@ export interface Category {
     title: string
 }
 
-type EventsQueryKey = ["events", { type: EventType, category: Category | undefined }];
+type EventsQueryKey = ["events", { type: EventType, category: Category | undefined, days: number }];
 type FetchEvents = { queryKey: EventsQueryKey };
 
-export default function EventsGrid(props: { type: EventType, category: Category | undefined }) {
-    const queryKey: EventsQueryKey = ["events", { type: props.type, category: props.category }];
+export default function EventsGrid(props: { type: EventType, category: Category | undefined, days: number }) {
+    const queryKey: EventsQueryKey = ["events", { type: props.type, category: props.category, days: props.days }];
     const { isLoading, isError, data, refetch } = useQuery(
         queryKey,
         ({ queryKey: [, param] }: FetchEvents): Promise<Event[]> => {
             const categoryQueryParameter = param.category?.id ? `&categoryId=${param.category?.id}` : "";
-            return fetch(`https://localhost:5001/events?limit=200&days=50&type=${param.type}${categoryQueryParameter}`)
+            return fetch(`https://localhost:5001/events?limit=200&days=${param.days}&type=${param.type}${categoryQueryParameter}`)
                 .then(async res => {
                     if (!res.ok) {
                         return Promise.reject(await res.text());

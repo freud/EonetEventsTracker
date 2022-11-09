@@ -7,6 +7,7 @@ import EventsFilter from "./features/events/EventsFilter";
 function App() {
     const [eventType, setEventType] = useState(EventType.Open)
     const [filterCategory, setFilterCategory] = useState<Category | undefined>(undefined)
+    const [days, setDays] = useState(10)
     return (<>
         <AppBar position="static" sx={{ marginBottom: 3, padding: 1 }}>
             <Container>
@@ -22,11 +23,13 @@ function App() {
             <EventsFilter
                 type={eventType}
                 category={filterCategory}
-                onFilterApply={(type, category) => {
+                days={days}
+                onFilterApply={(type, category, days) => {
                     setEventType(type)
                     setFilterCategory(category)
+                    setDays(days)
                 }} />
-            <EventsGrid type={eventType} category={filterCategory} />
+            <EventsGrid type={eventType} category={filterCategory} days={days} />
         </Container>
     </>);
 }
