@@ -5,7 +5,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import * as React from "react";
 import EventsGridCell from "./EventsGridCell";
-import { Event } from './EventsGrid'
+import { Event } from './api'
 import EventDetailsGridRow from "./EventDetailsGridRow";
 import { useState } from "react";
 

@@ -1,9 +1,9 @@
 import { FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import * as React from "react";
 import { useQuery } from "react-query";
-import { Category } from "./EventsGrid";
 import { useState } from "react";
 import ClearIcon from '@mui/icons-material/Clear';
+import { Category, getCategories } from "./api";
 
 interface CategoriesSelectProps {
     onCategoryChanged: (category: Category | undefined) => void
@@ -19,15 +19,7 @@ export default function CategoriesSelect(props: CategoriesSelectProps) {
             refetchOnMount: true,
             refetchOnWindowFocus: false,
             enabled: true,
-            queryFn: (): Promise<Category[]> =>
-                fetch(`${process.env.REACT_APP_API_BASE_URL}/categories`)
-                    .then(async res => {
-                        if (!res.ok) {
-                            return Promise.reject(await res.text());
-                        }
-                        return res.json();
-                    })
-                    .then(data => data.map((c: Category) => c))
+            queryFn: (): Promise<Category[]> => getCategories()
         }
     )
 

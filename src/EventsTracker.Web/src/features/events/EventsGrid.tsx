@@ -6,23 +6,7 @@ import {
 } from '@mui/material';
 import EventGridRow from "./EventGridRow";
 import _ from 'lodash'
-
-export interface Event {
-    id: string,
-    title: string,
-    closed: Date | null,
-    categories: Category[]
-}
-
-export enum EventType {
-    Open = 0,
-    Closed = 1
-}
-
-export interface Category {
-    id: string,
-    title: string
-}
+import { Category, EventType, Event, getEvents } from "./api";
 
 type Order = 'asc' | 'desc';
 type EventsQueryKey = ["events", {
@@ -51,19 +35,7 @@ export default function EventsGrid(props: { type: EventType, category: Category 
     }];
     const { isLoading, isError, data, refetch } = useQuery(
         queryKey,
-        ({ queryKey: [, param] }: FetchEvents): Promise<Event[]> => {
-            const categoryQueryParameter = param.category?.id ? `&categoryId=${param.category?.id}` : "";
-            return fetch(`${process.env.REACT_APP_API_BASE_URL}/events?limit=200&days=${param.days}&type=${param.type}${categoryQueryParameter}`)
-                .then(async res => {
-                    if (!res.ok) {
-                        return Promise.reject(await res.text());
-                    }
-                    return res.json();
-                })
-                .then(events => {
-                    return events.map((event: Event) => event)
-                })
-        },
+        ({ queryKey: [, param] }: FetchEvents): Promise<Event[]> => getEvents(param.days, param.type, param.category),
         {
             refetchInterval: false,
             refetchOnWindowFocus: false,

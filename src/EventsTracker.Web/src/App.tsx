@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
-import EventsGrid, { Category, EventType } from "./features/events/EventsGrid";
+import { Category, EventType } from "./features/events/api";
 import logo from './logo.svg'
 import EventsFilter from "./features/events/EventsFilter";
+import EventsGrid from "./features/events/EventsGrid";
 
 function App() {
     const [eventType, setEventType] = useState(EventType.Open)

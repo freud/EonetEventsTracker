@@ -1,26 +1,7 @@
-import {
-    Chip, CircularProgress, Table, TableBody, TableCell, TableRow
-} from "@mui/material";
+import { Chip, CircularProgress, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import * as React from "react";
 import { useQuery } from "react-query";
-
-interface EventDetails {
-    id: string
-    title: string
-    description: string
-    sources: EventSource[]
-    categories: EventCategory[]
-}
-
-interface EventSource {
-    id: string,
-    url: string
-}
-
-interface EventCategory {
-    id: string,
-    title: string
-}
+import { EventDetails, getEventDetails } from "./api";
 
 type EventQueryKey = ["eventDetails", { id: string }];
 type FetchEvent = { queryKey: EventQueryKey };
@@ -29,17 +10,7 @@ export default function EventDetailsGridRow(props: { eventId: string }) {
     const queryKey: EventQueryKey = ["eventDetails", { id: props.eventId }];
     const { isLoading, isFetching, data } = useQuery(
         queryKey,
-        ({ queryKey: [, param] }: FetchEvent): Promise<EventDetails> =>
-            fetch(`${process.env.REACT_APP_API_BASE_URL}/events/${param.id}/details`)
-                .then(async res => {
-                    if (!res.ok) {
-                        return Promise.reject(await res.text());
-                    }
-                    return res.json();
-                })
-                .then(event => {
-                    return event as EventDetails
-                }),
+        ({ queryKey: [, param] }: FetchEvent): Promise<EventDetails> => getEventDetails(param.id),
         {
             refetchInterval: false,
             refetchOnMount: true,

@@ -4,7 +4,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import * as React from "react";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CategoriesSelect from "./CategoriesSelect";
-import { Category, EventType } from "./EventsGrid";
+import { Category, EventType } from "./api";
 import DaysSelect from "./DaysSelect";
 
 interface FilterProps {
