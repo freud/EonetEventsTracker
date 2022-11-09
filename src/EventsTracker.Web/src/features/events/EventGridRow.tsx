@@ -10,14 +10,13 @@ import EventDetailsGridRow from "./EventDetailsGridRow";
 import { useState } from "react";
 
 export default function EventGridRow(props: { event: Event }) {
-
     const [isDetailsExpanded, setIsDetailsExpanded] = useState(false);
 
     return (<>
         <TableRow key={props.event.id}>
             <EventsGridCell disabled={props.event.isClosed}>
                 <Stack direction="row" alignItems="center" gap={1}>
-                    <EventTypeIcon isClosed={props.event.isClosed} />
+                    <EventTypeIcon isClosed={props.event.closed !== null} />
                     <EventClosedInformation closedAt={props.event.closed} />
                 </Stack>
             </EventsGridCell>

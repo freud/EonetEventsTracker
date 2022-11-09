@@ -22,8 +22,8 @@ interface EventCategory {
     title: string
 }
 
-export type EventQueryKey = ["eventDetails", { id: string }];
-export type FetchEvent = { queryKey: EventQueryKey };
+type EventQueryKey = ["eventDetails", { id: string }];
+type FetchEvent = { queryKey: EventQueryKey };
 
 export default function EventDetailsGridRow(props: { eventId: string }) {
     const queryKey: EventQueryKey = ["eventDetails", { id: props.eventId }];

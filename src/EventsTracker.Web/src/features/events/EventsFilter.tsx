@@ -4,10 +4,15 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import * as React from "react";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CategoriesSelect from "./CategoriesSelect";
-import { Category } from "./EventsGrid";
-import { Filter, EventType } from "../../App";
+import { Category, EventType } from "./EventsGrid";
 
-export default function EventsFilter(props: Filter) {
+interface FilterProps {
+    onFilterApply: (type: EventType, category: Category | undefined) => void
+    type: EventType,
+    category: Category | undefined;
+}
+
+export default function EventsFilter(props: FilterProps) {
     const [type, setType] = useState(props.type);
     const [category, setCategory] = useState<Category | undefined>(props.category);
     const applyFilter = () =>{

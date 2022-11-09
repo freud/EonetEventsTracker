@@ -5,10 +5,8 @@ import {
     Button
 } from '@mui/material';
 import EventGridRow from "./EventGridRow";
-import { useState } from "react";
-import { EventType, Filter } from "../../App";
 
-export interface EventData {
+export interface Event {
     id: string,
     title: string,
     closed: Date | null,
@@ -17,28 +15,21 @@ export interface EventData {
     categories: Category[]
 }
 
+export enum EventType {
+    Open = 0,
+    Closed = 1
+}
+
 export interface Category {
     id: string,
     title: string
 }
 
-export class Event {
-    public id: string = "";
-    public title: string = "";
-    public closed: Date | null = null;
-    public categories: Category[] = [];
-    public isClosed: boolean;
-    constructor(data: EventData) {
-        Object.assign(this, data);
-        this.isClosed = this.closed !== null;
-    }
-}
+type EventsQueryKey = ["events", { type: EventType, category: Category | undefined }];
+type FetchEvents = { queryKey: EventsQueryKey };
 
-export type EventsQueryKey = ["events", { type: EventType, category: Category | undefined }];
-export type FetchEvents = { queryKey: EventsQueryKey };
-
-export default function EventsGrid(props: { filter: Filter }) {
-    const queryKey: EventsQueryKey = ["events", { type: props.filter.type, category: props.filter.category }];
+export default function EventsGrid(props: { type: EventType, category: Category | undefined }) {
+    const queryKey: EventsQueryKey = ["events", { type: props.type, category: props.category }];
     const { isLoading, isError, data, refetch } = useQuery(
         queryKey,
         ({ queryKey: [, param] }: FetchEvents): Promise<Event[]> => {
@@ -51,13 +42,13 @@ export default function EventsGrid(props: { filter: Filter }) {
                     return res.json();
                 })
                 .then(events => {
-                    return events.map((event: any) => new Event(event))
+                    return events.map((event: Event) => event)
                 })
         },
         {
             refetchInterval: false,
             refetchOnWindowFocus: false,
-            useErrorBoundary: (error) => false            
+            useErrorBoundary: false            
         })
 
     if (isLoading) {

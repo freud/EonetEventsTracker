@@ -1,19 +1,8 @@
 import React, { useState } from 'react';
 import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
-import EventsGrid, { Category } from "./features/events/EventsGrid";
+import EventsGrid, { Category, EventType } from "./features/events/EventsGrid";
 import logo from './logo.svg'
 import EventsFilter from "./features/events/EventsFilter";
-
-export enum EventType {
-    Open = 0,
-    Closed = 1
-}
-
-export interface Filter {
-    onFilterApply: (type: EventType, category: Category | undefined) => void
-    type: EventType,
-    category: Category | undefined;
-}
 
 function App() {
     const [eventType, setEventType] = useState(EventType.Open)
@@ -37,7 +26,7 @@ function App() {
                     setEventType(type)
                     setFilterCategory(category)
                 }} />
-            <EventsGrid filter={{ type: eventType, category: filterCategory } as Filter} />
+            <EventsGrid type={eventType} category={filterCategory} />
         </Container>
     </>);
 }
