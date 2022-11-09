@@ -57,8 +57,7 @@ export default function EventsGrid(props: { filter: Filter }) {
         {
             refetchInterval: false,
             refetchOnWindowFocus: false,
-            useErrorBoundary: (error) => false,
-            
+            useErrorBoundary: (error) => false            
         })
 
     if (isLoading) {

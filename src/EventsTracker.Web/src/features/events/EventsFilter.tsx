@@ -23,6 +23,6 @@ export default function EventsFilter(props: Filter) {
             </Select>
         </FormControl>
         <CategoriesSelect category={category} onCategoryChanged={category => setCategory(category)} />
-        <LoadingButton variant="outlined" onClick={() => applyFilter()} loading={props.isLoading}><RestartAltIcon /></LoadingButton>
+        <LoadingButton variant="outlined" onClick={() => applyFilter()}><RestartAltIcon /></LoadingButton>
     </Stack>);
 }

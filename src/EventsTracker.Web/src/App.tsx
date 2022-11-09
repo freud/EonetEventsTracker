@@ -11,7 +11,6 @@ export enum EventType {
 
 export interface Filter {
     onFilterApply: (type: EventType, category: Category | undefined) => void
-    isLoading?: boolean,
     type: EventType,
     category: Category | undefined;
 }
