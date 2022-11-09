@@ -12,9 +12,9 @@ public class EventsEndpointBuilderTests
     // Single demo unit test
     [Theory]
     [MemberData(nameof(UseCases))]
-    public async Task filter__build__returns_absolute_uri_endpoint(EventsFilter filter, Uri endpoint)
+    public void filter__build__returns_absolute_uri_endpoint(EventsFilter filter, Uri endpoint)
     {
-        var result = await _sut.Get(filter);
+        var result = _sut.Get(filter);
         
         result.ShouldBe(endpoint);
     }

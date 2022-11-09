@@ -13,7 +13,7 @@ public class CategoriesRepository : ICategoriesRepository
 
     public async Task<IEnumerable<Category>> GetAll(CancellationToken token)
     {
-        var uri = await _endpoint.Get();
+        var uri = _endpoint.Get();
         var response = await _client.GetAsync(uri, token);
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<CategoriesResponse>(cancellationToken: token);

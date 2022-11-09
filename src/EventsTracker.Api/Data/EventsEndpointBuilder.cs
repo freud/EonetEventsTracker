@@ -12,7 +12,7 @@ public class EventsEndpointBuilder : IEventsEndpoint
         _options = options.Value;
     }
 
-    public async Task<Uri> Get(EventsFilter filter)
+    public Uri Get(EventsFilter filter)
     {
         var endpoint = "api/v3/events";
         var queryParameters = new List<string>
@@ -38,7 +38,7 @@ public class EventsEndpointBuilder : IEventsEndpoint
         return new Uri($"{_options.BaseUrl}{endpoint}?{queryString}", UriKind.Absolute);
     }
 
-    public async Task<Uri> GetDetails(string eventId)
+    public Uri GetDetails(string eventId)
     {
         var endpoint = "api/v3/events";
         return new Uri($"{_options.BaseUrl}{endpoint}/{eventId}", UriKind.Absolute);

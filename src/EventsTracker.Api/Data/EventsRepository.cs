@@ -13,7 +13,7 @@ public class EventsRepository : IEventsRepository
 
     public async Task<IEnumerable<Event>> GetEvents(EventsFilter filter, CancellationToken token)
     {
-        var uri = await _endpoint.Get(filter);
+        var uri = _endpoint.Get(filter);
         var response = await _client.GetAsync(uri, token);
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<EventsResponse>(cancellationToken: token);
@@ -26,7 +26,7 @@ public class EventsRepository : IEventsRepository
 
     public async Task<EventDetails> GetDetails(string eventId, CancellationToken token)
     {
-        var uri = await _endpoint.GetDetails(eventId);
+        var uri = _endpoint.GetDetails(eventId);
         var response = await _client.GetAsync(uri, token);
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<EventDetails>(cancellationToken: token);

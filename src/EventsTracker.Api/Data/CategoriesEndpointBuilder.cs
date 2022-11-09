@@ -12,7 +12,7 @@ public class CategoriesEndpointBuilder : ICategoriesEndpoint
         _options = options.Value;
     }
 
-    public async Task<Uri> Get()
+    public Uri Get()
     {
         var endpoint = "api/v3/categories";
         return new Uri($"{_options.BaseUrl}{endpoint}", UriKind.Absolute);
