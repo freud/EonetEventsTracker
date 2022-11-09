@@ -41,7 +41,6 @@ export default function EventDetailsGridRow(props: { eventId: string }) {
                     return event as EventDetails
                 }),
         {
-            onError: () => console.log("eeerrrrrrrrrr"),
             refetchInterval: false,
             refetchOnMount: true,
             refetchOnWindowFocus: false,

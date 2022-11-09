@@ -19,7 +19,6 @@ export default function EventsFilter(props: FilterProps) {
     const [category, setCategory] = useState<Category | undefined>(props.category);
     const [days, setDays] = useState<number>(10);
     const applyFilter = () =>{
-        console.log({type, category, days})
         props.onFilterApply(type, category, days);
     }
 
