@@ -25,7 +25,7 @@ public class EventsEndpointBuilderTests
             new object[]
             {
                 new EventsFilter(),
-                new Uri("https://test-endpoint.com/api/v2.1/events?limit=10&days=1&status=open")
+                new Uri("https://test-endpoint.com/api/v3/events?limit=10&days=1&status=open")
             },
 
             new object[] {
@@ -35,7 +35,7 @@ public class EventsEndpointBuilderTests
                     Limit = 67,
                     Type = EventStatus.Closed
                 },
-                new Uri("https://test-endpoint.com/api/v2.1/events?limit=67&days=4&status=closed") 
+                new Uri("https://test-endpoint.com/api/v3/events?limit=67&days=4&status=closed") 
             },
             
             new object[] {
@@ -45,7 +45,7 @@ public class EventsEndpointBuilderTests
                     Limit = 200,
                     Type = EventStatus.Open
                 },
-                new Uri("https://test-endpoint.com/api/v2.1/events?limit=200&days=90&status=open") 
+                new Uri("https://test-endpoint.com/api/v3/events?limit=200&days=90&status=open") 
             }
         };
 

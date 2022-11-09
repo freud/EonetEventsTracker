@@ -40,7 +40,7 @@ public class EventsEndpointBuilder : IEventsEndpoint
 
     public async Task<Uri> GetDetails(string eventId)
     {
-        var endpoint = "api/v2.1/events";
+        var endpoint = "api/v3/events";
         return new Uri($"{_options.BaseUrl}{endpoint}/{eventId}", UriKind.Absolute);
     }
 }
