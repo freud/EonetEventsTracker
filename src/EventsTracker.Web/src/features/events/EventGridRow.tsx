@@ -14,15 +14,15 @@ export default function EventGridRow(props: { event: Event }) {
 
     return (<>
         <TableRow key={props.event.id}>
-            <EventsGridCell disabled={props.event.isClosed}>
+            <EventsGridCell disabled={!!props.event.closed}>
                 <Stack direction="row" alignItems="center" gap={1}>
-                    <EventTypeIcon isClosed={props.event.closed !== null} />
+                    <EventTypeIcon isClosed={!!props.event.closed} />
                     <EventClosedInformation closedAt={props.event.closed} />
                 </Stack>
             </EventsGridCell>
-            <EventsGridCell disabled={props.event.isClosed}>{props.event.id}</EventsGridCell>
-            <EventsGridCell disabled={props.event.isClosed}>{props.event.title}</EventsGridCell>
-            <EventsGridCell disabled={props.event.isClosed}>
+            <EventsGridCell disabled={!!props.event.closed}>{props.event.id}</EventsGridCell>
+            <EventsGridCell disabled={!!props.event.closed}>{props.event.title}</EventsGridCell>
+            <EventsGridCell disabled={!!props.event.closed}>
                 {props.event.categories.map((category) => (
                     <Chip key={category.id} label={category.title} />))}
             </EventsGridCell>

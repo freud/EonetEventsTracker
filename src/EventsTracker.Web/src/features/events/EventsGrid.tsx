@@ -10,8 +10,6 @@ export interface Event {
     id: string,
     title: string,
     closed: Date | null,
-    isClosed: boolean,
-    fetchedAt: Date,
     categories: Category[]
 }
 
