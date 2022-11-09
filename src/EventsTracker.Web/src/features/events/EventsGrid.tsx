@@ -2,9 +2,10 @@ import * as React from 'react';
 import { useQuery } from 'react-query';
 import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Stack, Alert, AlertTitle,
-    Button
+    Button, TableSortLabel
 } from '@mui/material';
 import EventGridRow from "./EventGridRow";
+import _ from 'lodash'
 
 export interface Event {
     id: string,
@@ -23,11 +24,31 @@ export interface Category {
     title: string
 }
 
-type EventsQueryKey = ["events", { type: EventType, category: Category | undefined, days: number }];
+type Order = 'asc' | 'desc';
+type EventsQueryKey = ["events", {
+    type: EventType,
+    category: Category | undefined,
+    days: number
+}];
 type FetchEvents = { queryKey: EventsQueryKey };
 
 export default function EventsGrid(props: { type: EventType, category: Category | undefined, days: number }) {
-    const queryKey: EventsQueryKey = ["events", { type: props.type, category: props.category, days: props.days }];
+    const [order, setOrder] = React.useState<Order>('asc');
+    const [orderBy, setOrderBy] = React.useState<keyof Event>('id');
+    const handleSort = (
+        event: React.MouseEvent<unknown>,
+        property: keyof Event,
+    ) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
+
+    const queryKey: EventsQueryKey = ["events", {
+        type: props.type,
+        category: props.category,
+        days: props.days
+    }];
     const { isLoading, isError, data, refetch } = useQuery(
         queryKey,
         ({ queryKey: [, param] }: FetchEvents): Promise<Event[]> => {
@@ -72,15 +93,15 @@ export default function EventsGrid(props: { type: EventType, category: Category 
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell width={220}>Closed?</TableCell>
-                        <TableCell width={110}>ID</TableCell>
-                        <TableCell>Title</TableCell>
+                        <TableCell width={220}><TableSortLabel onClick={(e) => handleSort(e, 'closed')} active={orderBy === 'closed'} direction={orderBy === 'closed' ? order : 'asc'}>Closed?</TableSortLabel></TableCell>
+                        <TableCell width={110}><TableSortLabel onClick={(e) => handleSort(e, 'id')} active={orderBy === 'id'} direction={orderBy === 'id' ? order : 'asc'}>ID</TableSortLabel></TableCell>
+                        <TableCell><TableSortLabel onClick={(e) => handleSort(e, 'title')} active={orderBy === 'title'} direction={orderBy === 'title' ? order : 'asc'}>Title</TableSortLabel></TableCell>
                         <TableCell>Categories</TableCell>
                         <TableCell></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data && data.map((event) => (
+                    {data && _.orderBy(data, [orderBy], [order]).map((event) => (
                         <EventGridRow event={event} key={event.id} />
                     ))}
                 </TableBody>
